@@ -28,12 +28,36 @@ export async function getToken(email){
     }
 }
 
-export async function insertToken(user_id, token){
+export async function insertToken(email, token){
     try{
-        connection.query(`INSERT INTO sessions (token,user_id) VALUES ($1,$2)`, [token, user_id])
+        const user_id =  await connection.query(`
+            SELECT * FROM users WHERE email=$1
+        `, [email])
+
+        connection.query(`
+            INSERT INTO sessions (token,user_id) VALUES ($1,$2)
+        `, [token, user_id.rows[0].id])
 
     }catch(err){
         res.status(500).send({message: err}) 
         return
     }
+}
+
+export async function verifyTokenUrlPermission(token, url_id){
+
+    try{
+
+        const urlUser = connection.query(`
+            SELECT * FROM urls JOIN sessions ON sessions.user_id = urls.user_id 
+            WHERE urls.id=$1 AND sessions.token=$2 AND sessions.active=$3
+        `, [url_id, token, true])
+
+        return urlUser
+
+    }catch(err){
+        res.status(500).send({message: err}) 
+        return
+    }
+
 }

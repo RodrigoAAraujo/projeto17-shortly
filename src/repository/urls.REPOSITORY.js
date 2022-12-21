@@ -15,3 +15,59 @@ export async function insertUrl(url, shortUrl, token){
         return
     }
 }
+
+export async function getUrl(id){
+
+    try{
+        const url = connection.query(`
+            SELECT id, "shortUrl", url FROM urls WHERE id=$1
+        `, [id])
+
+        return url
+
+    }catch(err){
+        res.status(500).send({message: err}) 
+        return
+    }
+}
+
+export async function getUrlByShortUrl(shortUrl){
+
+    try{
+        const url = connection.query(`
+            SELECT id, "shortUrl", url FROM urls WHERE "shortUrl"=$1
+        `, [shortUrl])
+
+        return url
+
+    }catch(err){
+        res.status(500).send({message: err}) 
+        return
+    }
+}
+
+export async function updateVisitCount(id){
+
+    try{
+        connection.query(`
+            UPDATE urls SET "visitCount"="visitCount"+1 WHERE id=$1
+        `, [id])
+
+    }catch(err){
+        res.status(500).send({message: err}) 
+        return
+    }
+}
+
+export async function deleteUrlById(id){
+
+    try{
+        connection.query(`
+            DELETE FROM urls WHERE id=$1
+        `, [id])
+
+    }catch(err){
+        res.status(500).send({message: err}) 
+        return
+    }
+}

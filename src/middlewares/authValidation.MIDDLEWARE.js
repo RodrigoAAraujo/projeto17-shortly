@@ -1,24 +1,32 @@
-import { checkToken } from "../repository/sesssions.REPOSITORY"
+import { validateToken } from "../repository/sesssions.REPOSITORY.js"
 
 async function authValidation(req,res,next){
     const {authorization} = req.headers
+
+    if(!authorization){
+        res.sendStatus(401)
+        return
+    }
 
     if(!authorization.includes("Bearer ")){
         res.sendStatus(401)
         return
     }
 
-    const token = authValidation.replace("Bearer ", "")
+    const token = authorization.replace("Bearer ", "")
 
     try{
-        const session = await checkToken(token)
+        console.log(token)
+        const session = await validateToken(token)
 
-        if(session.length === 0){
+        console.log(session)
+
+        if(session.rows.length === 0){
             res.sendStatus(401)
             return
         }
 
-        if(session[0].active === "FALSE"){
+        if(session.rows[0].active === "FALSE"){
             res.sendStatus(401)
             return
         }

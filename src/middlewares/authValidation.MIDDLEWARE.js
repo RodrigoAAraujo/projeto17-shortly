@@ -19,7 +19,7 @@ async function authValidation(req,res,next){
         const session = await validateToken(token)
 
         if(session.rows.length === 0){
-            res.sendStatus(401)
+            res.sendStatus(404)
             return
         }
 

@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import {v4 as uuidV4} from 'uuid'
 
 import { getToken, insertToken } from '../repository/sessions.REPOSITORY.js'
-import { getUser, insertUser } from '../repository/users.REPOSITORY.js'
+import { getUserLinks, insertUser, getRank } from '../repository/users.REPOSITORY.js'
 
 export async function registerUser(req, res){
     const {name, password, email} = req.body
@@ -38,6 +38,37 @@ export async function sendToken(req,res){
         res.status(200).send({token: createToken})
         return
 
+    }catch(err){
+        res.status(500).send({message: err}) 
+        return
+    }
+}
+
+export async function sendMyInfo(req,res){
+    const {authorization} = req.headers
+
+    const token = authorization.replace("Bearer ", "")
+
+    try{
+        const linksUser = await getUserLinks(token)
+
+        res.send(linksUser)
+        return
+
+    }catch(err){
+        res.status(500).send({message: err}) 
+        return
+    }
+}
+
+export async function sendRank(req,res){
+
+    try{
+        const rank = await getRank()
+
+        res.send(rank.rows)
+        return
+        
     }catch(err){
         res.status(500).send({message: err}) 
         return

@@ -78,8 +78,7 @@ export async function getRank(){
         `)
 
         return rank
-
-
+        
     }catch(err){
         res.status(500).send({message: err}) 
         return

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import authValidation from "../middlewares/authValidation.MIDDLEWARE.js";
 import validateBody from "../middlewares/validateBody.MIDDLEWARE.js";
+
 import { validateEmailExitence, validateUserExistence } from "../middlewares/users.MIDDLEWARES.js";
 import { registerUser, sendToken, sendMyInfo, sendRank } from "../controllers/user.CONTROLLERS.js";
 

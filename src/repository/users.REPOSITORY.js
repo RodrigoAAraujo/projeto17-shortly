@@ -72,13 +72,13 @@ export async function getRank(){
     try{
         const rank = connection.query(`
             SELECT users.id, users.name, COUNT(urls.id) AS "linksCount" , 
-            SUM( CASE WHEN urls."visitCount" IS NULL THEN 0 ELSE 1 END) AS "visitCount" 
+            SUM( CASE WHEN urls."visitCount" IS NULL THEN 0 ELSE urls."visitCount" END) AS "visitCount" 
             FROM users LEFT JOIN urls ON users.id = urls.user_id
             GROUP BY users.id ORDER BY "visitCount" DESC LIMIT 10
         `)
 
         return rank
-        
+
     }catch(err){
         res.status(500).send({message: err}) 
         return

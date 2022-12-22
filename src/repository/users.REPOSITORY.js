@@ -42,10 +42,11 @@ export async function getUserLinks(token){
         `, [token])
 
         const userInfo = await connection.query(`
-            SELECT users.id, users.name, SUM(urls."visitCount")
-            AS "visitCount" FROM sessions 
-            JOIN urls ON sessions.user_id = urls.user_id
-            LEFT JOIN users ON sessions.user_id = users.id
+            SELECT users.id, users.name, 
+            SUM( CASE WHEN urls."visitCount" IS NULL THEN 0 ELSE urls."visitCount" END) AS "visitCount" 
+            FROM sessions 
+            FULL JOIN urls ON sessions.user_id = urls.user_id
+            FULL JOIN users ON sessions.user_id = users.id
             WHERE sessions.token=$1
             GROUP BY users.id
         `, [token]) 

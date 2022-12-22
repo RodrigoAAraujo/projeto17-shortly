@@ -59,7 +59,7 @@ ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 
 CREATE TABLE public.urls (
     id integer NOT NULL,
-    "shortUrl" text NOT NULL,
+    "shortUrl" text NOT NULL UNIQUE,
     url text NOT NULL,
     "visitCount" integer DEFAULT 0 NOT NULL,
     user_id integer NOT NULL,
@@ -94,7 +94,7 @@ ALTER SEQUENCE public.urls_id_seq OWNED BY public.urls.id;
 CREATE TABLE public.users (
     id integer NOT NULL,
     name character varying(40) NOT NULL,
-    email text NOT NULL,
+    email text NOT NULL UNIQUE,
     password text NOT NULL,
     "createdAt" date DEFAULT now()
 );
